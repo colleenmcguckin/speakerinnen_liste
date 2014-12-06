@@ -60,4 +60,40 @@ class ProfileTest < ActiveSupport::TestCase
     expected_twitter = "tweeter"
     assert expected_twitter, testprofile.twitter
   end
+
+  test "should convert profile attributes to json" do
+    horst = profiles(:one)
+    horst.id = 1
+    horst.created_at = Time.parse('2014-12-06 15:04:13')
+    horst.updated_at = Time.parse('2014-12-06 15:04:20')
+    horst.medialinks = [ medialinks(:one) ]
+
+    I18n.locale = :en
+    horst.bio = 'english bio'
+    horst.main_topic = 'english main topic'
+
+    I18n.locale = :de
+    horst.bio = 'deutsche bio'
+    horst.main_topic = 'deutsches Hauptthema'
+
+    parsed_json = JSON.parse(horst.to_json)
+    
+    assert_equal parsed_json, {
+      "id"=>1,
+      "firstname"=>"Horst",
+      "lastname"=>"lastname",
+      "email"=>"horst@mail.de",
+      "languages"=>"Deutsch",
+      "city"=>"Berlin",
+      "twitter"=>"MyString",
+      "created_at"=>"2014-12-06T14:04:13.000Z",
+      "updated_at"=>"2014-12-06T14:04:20.000Z",
+      "website"=>nil,
+      "medialinks"=>[{"url"=>"MyString", "title"=>"MyString", "description"=>nil, "position"=>nil}],
+      "topics"=>[],
+      "picture"=>{"original"=>nil, "profile_small"=>nil, "profile_smallest"=>nil},
+      "bio"=>{"en"=>"english bio", "de"=>"deutsche bio"},
+      "main_topic"=>{"en"=>"english main topic", "de"=>"deutsches Hauptthema"}
+    }
+  end
 end

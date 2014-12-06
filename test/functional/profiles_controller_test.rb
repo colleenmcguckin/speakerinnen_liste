@@ -142,6 +142,10 @@ class ProfilesControllerTest < ActionController::TestCase
     assert_equal 'Profil wurde erfolgreich gelöscht.', flash[:notice]
   end
 
+  test "should only give back filtered profiles" do
+
+  end
+
   # test "twitter @ symbol correcty removed" do
   #   input_hash={:twitter => "@nickname", :email => "me@me.com"}
   #   expected_hash={:twitter => "nickname", :email => "me@me.com"}
