@@ -281,8 +281,6 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    turbolinks (2.3.0)
-      coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.5.3)
@@ -340,6 +338,5 @@ DEPENDENCIES
   selenium-webdriver (= 2.38.0)
   simple_form (~> 3.0.2)
   textacular (~> 3.0)
-  turbolinks
   uglifier (>= 1.0.3)
   unicorn
