@@ -6,6 +6,7 @@ class ProfilesController < ApplicationController
   before_action :set_profile, only: [:show, :edit, :update, :destroy, :require_permission]
 
   before_filter :require_permission, only: [:edit, :destroy, :update]
+  before_filter :api_authentication_required, if: ->(controller){ controller.request.format.json? }
 
   def index
     if params[:topic]
@@ -128,4 +129,10 @@ class ProfilesController < ApplicationController
               .per(24)
     end
 
+    def api_authentication_required
+      authenticate_or_request_with_http_basic do |name, token|
+        api_token = ApiToken.find_by(name: name)
+        api_token.token.present? && api_token.token == token
+      end
+    end
 end
