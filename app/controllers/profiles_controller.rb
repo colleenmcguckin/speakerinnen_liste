@@ -14,6 +14,11 @@ class ProfilesController < ApplicationController
     else
       @profiles = profiles_for_index
     end
+
+    if params[:ids]
+      @profiles = @profiles.where(id: params[:ids].split(','))
+    end
+
     @tags = ActsAsTaggableOn::Tag.most_used(100)
 
     respond_to do |format|
