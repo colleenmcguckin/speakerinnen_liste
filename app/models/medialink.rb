@@ -15,4 +15,15 @@ class Medialink < ActiveRecord::Base
     link target: '_blank', rel: 'nofollow'
   end
 
+  def as_json(options = {})
+    attributes.slice(
+      "url",
+      "title",
+      "description",
+      "created_at",
+      "updated_at",
+      "position"
+    )
+  end
+
 end

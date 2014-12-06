@@ -14,6 +14,11 @@ class ProfilesController < ApplicationController
       @profiles = profiles_for_index
     end
     @tags = ActsAsTaggableOn::Tag.most_used(100)
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @profiles }
+    end
   end
 
   def category
