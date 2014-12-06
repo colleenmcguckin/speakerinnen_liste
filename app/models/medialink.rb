@@ -20,8 +20,6 @@ class Medialink < ActiveRecord::Base
       "url",
       "title",
       "description",
-      "created_at",
-      "updated_at",
       "position"
     )
   end
