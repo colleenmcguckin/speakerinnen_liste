@@ -3,7 +3,6 @@
 --
 
 SET statement_timeout = 0;
-SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -257,7 +256,8 @@ CREATE TABLE profiles (
     media_url character varying(255),
     published boolean DEFAULT false,
     website character varying(255),
-    admin_comment text
+    admin_comment text,
+    slug character varying(255)
 );
 
 
@@ -549,6 +549,13 @@ CREATE UNIQUE INDEX index_profiles_on_reset_password_token ON profiles USING btr
 
 
 --
+-- Name: index_profiles_on_slug; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_profiles_on_slug ON profiles USING btree (slug);
+
+
+--
 -- Name: index_taggings_on_taggable_id_and_taggable_type_and_context; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -580,16 +587,7 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 -- Name: _RETURN; Type: RULE; Schema: public; Owner: -
 --
 
-CREATE RULE "_RETURN" AS
-    ON SELECT TO searches DO INSTEAD  SELECT profiles.id AS profile_id,
-    array_to_string(ARRAY[profiles.firstname, profiles.lastname, profiles.languages, profiles.city, (string_agg(DISTINCT medialinks.title, ' '::text))::character varying, (string_agg(DISTINCT medialinks.description, ' '::text))::character varying, (string_agg(DISTINCT profile_translations.bio, ' '::text))::character varying, (string_agg(DISTINCT (profile_translations.main_topic)::text, ' '::text))::character varying, (string_agg(DISTINCT (tags.name)::text, ' '::text))::character varying], ' '::text) AS search_field
-   FROM ((((profiles
-     LEFT JOIN medialinks ON ((medialinks.profile_id = profiles.id)))
-     LEFT JOIN profile_translations ON ((profile_translations.profile_id = profiles.id)))
-     LEFT JOIN taggings ON ((taggings.taggable_id = profiles.id)))
-     LEFT JOIN tags ON ((tags.id = taggings.tag_id)))
-  WHERE (profiles.published = true)
-  GROUP BY profiles.id;
+CREATE RULE "_RETURN" AS ON SELECT TO searches DO INSTEAD SELECT profiles.id AS profile_id, array_to_string(ARRAY[profiles.firstname, profiles.lastname, profiles.languages, profiles.city, (string_agg(DISTINCT medialinks.title, ' '::text))::character varying, (string_agg(DISTINCT medialinks.description, ' '::text))::character varying, (string_agg(DISTINCT profile_translations.bio, ' '::text))::character varying, (string_agg(DISTINCT (profile_translations.main_topic)::text, ' '::text))::character varying, (string_agg(DISTINCT (tags.name)::text, ' '::text))::character varying], ' '::text) AS search_field FROM ((((profiles LEFT JOIN medialinks ON ((medialinks.profile_id = profiles.id))) LEFT JOIN profile_translations ON ((profile_translations.profile_id = profiles.id))) LEFT JOIN taggings ON ((taggings.taggable_id = profiles.id))) LEFT JOIN tags ON ((tags.id = taggings.tag_id))) WHERE (profiles.published = true) GROUP BY profiles.id;
 
 
 --
@@ -659,4 +657,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140901194314');
 INSERT INTO schema_migrations (version) VALUES ('20140901194315');
 
 INSERT INTO schema_migrations (version) VALUES ('20150131194544');
+
+INSERT INTO schema_migrations (version) VALUES ('20150406145350');
 

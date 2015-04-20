@@ -1,6 +1,19 @@
 class Profile < ActiveRecord::Base
   include AutoHtml
   include HasPicture
+  
+  extend FriendlyId #helps to create userfriendly urls
+  friendly_id :firstname_lastname, use: :slugged
+
+  def firstname_lastname
+    "#{firstname} #{lastname}"
+  end
+
+  #only an example should include more cases
+  def should_generate_new_friendly_id?
+    lastname_changed?
+    firstname_changed?
+  end
 
   translates :bio, :main_topic, fallbacks_for_empty_translations: true
   accepts_nested_attributes_for :translations
@@ -123,5 +136,4 @@ class Profile < ActiveRecord::Base
       'main_topic' => main_topic_translations
     )
   end
-
 end

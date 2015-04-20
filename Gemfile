@@ -27,6 +27,7 @@ gem 'auto_html', github: 'dejan/auto_html'
 gem 'mandrill-api'
 gem 'simple_form', '~> 3.0.2'
 gem 'globalize', '~> 4.0.2'
+gem 'friendly_id', '~> 5.1.0'
 
 gem 'rails_12factor', group: :production
 
