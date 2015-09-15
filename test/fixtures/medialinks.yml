@@ -1,8 +1,10 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  url: MyString
-  title: MyString
+  url: www.test.com
+  title: Title
+  description: That the description.
+
 
 two:
   url: MyString
