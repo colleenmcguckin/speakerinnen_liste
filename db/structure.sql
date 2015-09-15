@@ -187,6 +187,41 @@ ALTER SEQUENCE category_translations_id_seq OWNED BY category_translations.id;
 
 
 --
+-- Name: medialink_translations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE medialink_translations (
+    id integer NOT NULL,
+    medialink_id integer NOT NULL,
+    locale character varying(255) NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    url text,
+    title text,
+    description text
+);
+
+
+--
+-- Name: medialink_translations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE medialink_translations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: medialink_translations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE medialink_translations_id_seq OWNED BY medialink_translations.id;
+
+
+--
 -- Name: medialinks; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -290,8 +325,7 @@ CREATE TABLE profiles (
     media_url character varying(255),
     published boolean DEFAULT false,
     website character varying(255),
-    admin_comment text,
-    slug character varying(255)
+    admin_comment text
 );
 
 
@@ -331,8 +365,6 @@ CREATE TABLE searches (
     profile_id integer,
     search_field text
 );
-
-ALTER TABLE ONLY searches REPLICA IDENTITY NOTHING;
 
 
 --
@@ -439,6 +471,13 @@ ALTER TABLE ONLY category_translations ALTER COLUMN id SET DEFAULT nextval('cate
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY medialink_translations ALTER COLUMN id SET DEFAULT nextval('medialink_translations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY medialinks ALTER COLUMN id SET DEFAULT nextval('medialinks_id_seq'::regclass);
 
 
@@ -511,6 +550,14 @@ ALTER TABLE ONLY category_translations
 
 
 --
+-- Name: medialink_translations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY medialink_translations
+    ADD CONSTRAINT medialink_translations_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: medialinks_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -565,6 +612,20 @@ CREATE INDEX index_category_translations_on_locale ON category_translations USIN
 
 
 --
+-- Name: index_medialink_translations_on_locale; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_medialink_translations_on_locale ON medialink_translations USING btree (locale);
+
+
+--
+-- Name: index_medialink_translations_on_medialink_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_medialink_translations_on_medialink_id ON medialink_translations USING btree (medialink_id);
+
+
+--
 -- Name: index_profile_translations_on_locale; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -597,13 +658,6 @@ CREATE UNIQUE INDEX index_profiles_on_email ON profiles USING btree (email);
 --
 
 CREATE UNIQUE INDEX index_profiles_on_reset_password_token ON profiles USING btree (reset_password_token);
-
-
---
--- Name: index_profiles_on_slug; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_profiles_on_slug ON profiles USING btree (slug);
 
 
 --
@@ -718,7 +772,7 @@ INSERT INTO schema_migrations (version) VALUES ('20140901194315');
 
 INSERT INTO schema_migrations (version) VALUES ('20150131194544');
 
-INSERT INTO schema_migrations (version) VALUES ('20150406145350');
-
 INSERT INTO schema_migrations (version) VALUES ('20150715095533');
+
+INSERT INTO schema_migrations (version) VALUES ('20150914104949');
 
