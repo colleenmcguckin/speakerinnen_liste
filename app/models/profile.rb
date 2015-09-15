@@ -121,7 +121,7 @@ class Profile < ActiveRecord::Base
       'updated_at',
       'website'
     ).merge(
-      'medialinks' => medialinks,
+      'medialinks' => medialinks_translations,
       'topics' => topics.map(&:name),
       'picture' => picture,
       'bio' => bio_translations,

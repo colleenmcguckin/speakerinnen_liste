@@ -52,11 +52,6 @@ de:
         tags_count: "Die Anzahl aller Tags ist "
         tags_filter_option: "Alle Tags ohne Kategorien anzeigen"
         tags_filter_default: "Alle Kategorien auswählen"
-      medialink:
-        url: "URL:"
-        title: "Überschrift:"
-        description: "Beschreibung:"
-        new_medialink_for: "Du erstellst gerade eine neue Referenz für "
   pages:
     home:
       search:
@@ -209,6 +204,7 @@ de:
       updated: "Referenz wurde erfolgreich geändert."
       destroyed: "Referenz wurde erfolgreich gelöscht."
       no_permission: "Du hast nicht die Rechte, die Referenz zu bearbeiten."
+      error: "URL und Überschrift müssen ausgefüllt werden."
     categories:
       created: '%{category_name} wurde erfolgreich erstellt.'
       updated: '%{category_name} wurde erfolgreich geändert.'
@@ -230,10 +226,6 @@ de:
         twitter: "Twitter"
         picture: "Bild"
         translation: "<strong>Hier kannst Du Dein Hauptthema und Deine Bio auf Deutsch und Englisch eintragen:</strong>"
-      medialink:
-        url: "URL:"
-        title: "Überschrift:"
-        description: "Beschreibung:"
   devise:
     registrations:
       edit:
@@ -269,12 +261,14 @@ de:
     <br>"
     help: "Du kannst die Reihenfolge der Vorträge mit Drag&Drop verschieben."
     url: "URL:"
+    url_placeholder: "Füge http:// hinzu"
     title: "Überschrift:"
     description: "Beschreibung:"
     edit_link: " bearbeiten"
     delete_link: " löschen"
     language: "de"
     tooltip: "Verschiebe die Reihenfolge mit Drag&Drop."
+    new_medialink_for: "%{language} Beschreibung:"
   search:
     no_profile: "Es sind keine Profile vorhanden."
     empty: "Du hast nach <strong> %{searchparams} </strong> gesucht, leider haben wir nix gefunden :("

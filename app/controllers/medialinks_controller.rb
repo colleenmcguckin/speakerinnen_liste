@@ -10,15 +10,16 @@ class MedialinksController < ApplicationController
   end
 
   def new
-    @medialink = Medialink.new(url: 'http://')
+    @medialink = Medialink.new
+    build_missing_translations(@medialink)
   end
 
   def edit
+    build_missing_translations(@medialink)
   end
 
   def update
     if @medialink.update_attributes(medialink_params)
-      # TODO translation flash
       redirect_to profile_medialinks_path(@profile), notice: (I18n.t('flash.medialink.updated'))
     else
       render action: 'edit'
@@ -27,18 +28,15 @@ class MedialinksController < ApplicationController
 
   def destroy
     @medialink.destroy
-      # TODO translation flash
     redirect_to profile_medialinks_path(@profile), notice: (I18n.t('flash.medialink.destroyed'))
   end
 
   def create
     @medialink = @profile.medialinks.build(medialink_params)
     if @medialink.save
-      # TODO translation flash
       flash[:notice] = (I18n.t('flash.medialink.created'))
       redirect_to profile_medialinks_path(@profile)
     else
-      # TODO translation flash
       flash[:notice] = (I18n.t('flash.medialink.error'))
       render action: 'new'
     end
@@ -72,7 +70,18 @@ class MedialinksController < ApplicationController
   end
 
   def medialink_params
-    params.require(:medialink).permit(:url, :title, :description, :position)
+    params.require(:medialink).permit(
+      :position,
+      translations_attributes: [:id, :url, :title, :description, :locale]
+      )
+  end
+
+  def build_missing_translations(object)
+    I18n.available_locales.each do |locale|
+      unless object.translated_locales.include?(locale)
+        object.translations.build(locale: locale)
+      end
+    end
   end
 
 end

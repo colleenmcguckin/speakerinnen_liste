@@ -52,11 +52,6 @@ en:
         tags_count: "The number of all tags is "
         tags_filter_option: "Show all tags without category"
         tags_filter_default: "Show all categories"
-      medialink:
-        url: "URL:"
-        title: "Title:"
-        description: "Description:"
-        new_medialink_for: "You are about to add a new reference for "
   pages:
     home:
       search:
@@ -211,6 +206,7 @@ en:
       updated: 'Reference was successfully updated.'
       destroyed: 'Reference was successfully deleted.'
       no_permission: "You don’t have permission to edit the reference."
+      error: "You have to fill in URL and Title."
     categories:
       created: '%{category_name} was successfully created.'
       updated: '%{category_name} was successfully updated.'
@@ -231,10 +227,6 @@ en:
         twitter: "Twitter"
         picture: "Picture"
         translation: "<strong>You can fill in your maintopic and your bio both in German and English:</strong>"
-      medialink:
-        url: "URL:"
-        title: "Title:"
-        description: "Description:"
   devise:
     registrations:
       edit:
@@ -267,12 +259,14 @@ It would be best not to have too many but also not too few. Add diverse examples
 Links to Youtube videos will be shown as embedded videos. Other links will be clickable. You can also list audio files and texts."
     help: "You can change the sort order of the references per drag&drop."
     url: "URL:"
+    url_placeholder: "Add http://"
     title: "Title:"
     description: "Description:"
     edit_link: " edit"
     delete_link: " delete"
     language: "en"
     tooltip: "Change the sort order per drag&drop."
+    new_medialink_for: "%{language} description:"
   search:
     no_profile: "There are no profiles!"
     empty: "You searched for <strong> %{searchparams} </strong> but unfortunately we didn't find anything."
