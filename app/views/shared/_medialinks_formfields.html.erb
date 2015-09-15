@@ -1,0 +1,20 @@
+<%= f.fields_for :translations, @medialink.translations.sort_by(&:locale) do |translation| %>
+
+  <%= translation.hidden_field :locale %>
+
+  <p>
+    <%= translation.label :medialink, t(:new_medialink_for,
+      scope: 'medialinks',
+      language:  @medialink.language(translation)).html_safe %>
+  </p>
+
+  <%= translation.label :url, t(:url, scope: 'medialinks') %>
+  <%= translation.text_field :url, placeholder: t(:url_placeholder, scope: 'medialinks').html_safe, class: 'input--width-100 mb' %>
+  <%= translation.label :title, t(:title, scope: 'medialinks') %>
+  <%= translation.text_field :title, class: 'input--width-100 mb' %>
+  <%= translation.label :description, t(:description, scope: 'medialinks') %>
+  <%= translation.text_area :description, rows: 5, class: 'input--width-100 mb' %>
+
+<% end %>
+
+<%= f.button :submit, t(:save, scope: 'general'), class:'btn btn--small mt mb++' %>
