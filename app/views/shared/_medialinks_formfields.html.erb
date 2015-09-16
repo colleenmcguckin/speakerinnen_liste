@@ -3,9 +3,11 @@
   <%= translation.hidden_field :locale %>
 
   <p>
-    <%= translation.label :medialink, t(:new_medialink_for,
-      scope: 'medialinks',
-      language:  @medialink.language(translation)).html_safe %>
+    <% if @medialink.language(translation) == "englische" || @medialink.language(translation) == "german" %>
+      <%= translation.label :medialink, t(:new_medialink_for,
+          scope: 'medialinks',
+          language:  @medialink.language(translation)).html_safe %>
+    <% end %>
   </p>
 
   <%= translation.label :url, t(:url, scope: 'medialinks') %>
@@ -13,7 +15,7 @@
   <%= translation.label :title, t(:title, scope: 'medialinks') %>
   <%= translation.text_field :title, class: 'input--width-100 mb' %>
   <%= translation.label :description, t(:description, scope: 'medialinks') %>
-  <%= translation.text_area :description, rows: 5, class: 'input--width-100 mb' %>
+  <%= translation.text_area :description, rows: 3, class: 'input--width-100 mb+' %>
 
 <% end %>
 

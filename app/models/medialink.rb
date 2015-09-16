@@ -27,11 +27,11 @@ class Medialink < ActiveRecord::Base
   # to have the correct language variable for the yml file
   def language(translation)
     if translation.object.locale == :en && I18n.locale == :de
-      'Englische'
+      'englische'
     elsif translation.object.locale == :en && I18n.locale == :en
       'English'
     elsif translation.object.locale == :de && I18n.locale == :en
-      'German'
+      'german'
     else
       'Deutsche'
     end
