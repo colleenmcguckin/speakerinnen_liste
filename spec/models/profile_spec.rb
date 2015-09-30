@@ -1,11 +1,11 @@
 describe 'profile', type: :model do
 let(:profile) { FactoryGirl.create(:profile) }
- 
+
 describe 'profile settings' do
   it "has a valid factory" do
    expect(FactoryGirl.build(:profile)).to be_valid
    end
-  
+
   it "by default isn't admin" do
     expect(profile.admin).to be(false)
   end
