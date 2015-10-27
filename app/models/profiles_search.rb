@@ -34,6 +34,7 @@ class ProfilesSearch
       result = result
         .joins(:profile_languages).where('profile_languages.iso_639_1' => @query[:languages])
     end
+    #
     # to get the search for tags working, we had to add that if statement
     if @query[:topics].present?
       result = result

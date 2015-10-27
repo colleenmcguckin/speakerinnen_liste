@@ -83,7 +83,6 @@ class ProfilesController < ApplicationController
     @profile = Profile.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def profile_params
     params.require(:profile).permit(
       :email,

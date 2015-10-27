@@ -9,6 +9,7 @@ describe ProfilesSearch, type: :model do
   let!(:profile_not_matched) { FactoryGirl.create(:published, firstname: 'Angela', lastname: 'Davis') }
   let!(:profile_not_published) { FactoryGirl.create(:unpublished, firstname: 'Fred') }
 
+
   describe 'results' do
 
     it 'does not return unpublished profiles' do
