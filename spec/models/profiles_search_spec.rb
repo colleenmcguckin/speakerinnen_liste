@@ -75,7 +75,7 @@ describe ProfilesSearch, type: :model do
         profile2.topic_list.add('algorithm')
         profile2.save!
 
-        expect(ProfilesSearch.new({topics: 'algorithm'}).results).to eq [profile, profile2]
+        expect(ProfilesSearch.new({topics: 'algorithm'}).results.all).to eq [profile2, profile]
       end
     end
   end
