@@ -6,7 +6,9 @@
     <%= f.input :email, input_html: { class: "mb input--width-100" } %>
     <%= f.input :twitter, placeholder: '@', input_html: { class: "mb input--width-100" } %>
     <%= f.input :city, input_html: { class: "mb input--width-100" } %>
-    <%= t(:language, scope: "profiles.index") %>
+    <%# t(:language, scope: "profiles.index") %>
+
+    <%#Here yoy get multiple input fields for language %>
     <%= f.simple_fields_for :profile_languages do |profile_language_form| %>
       <%= profile_language_form.label(:iso_639_1, t(:language, scope: "profiles.index"), class: "mb input--width-100 hidden") %>
       <%= profile_language_form.input(
@@ -17,11 +19,9 @@
         label: false
       ) %>
     <% end %>
-<% Car.each do |c| %>
-  <%= check_box_tag "car_ids[]", c.id, false, :id => "car_ids_#{c.id}" %>
-<% end %>
+
     <%# label_tag('profile[iso_languages]', t(:language, scope: "profiles.index"), class: "mb input--width-100") %>
-        <%# language_select('profile[iso_languages]') %>
+    <%# language_select('profile[iso_languages]') %>
 
     <%= f.input :website, placeholder: 'http://', input_html: { class: "mb input--width-100" } %>
     <%= f.input :topic_list, label: t(:topic_list, scope: 'activerecord.attributes.profile').html_safe, input_html: { class: "mb input--width-100" } %>
