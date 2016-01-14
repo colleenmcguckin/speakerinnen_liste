@@ -36,6 +36,11 @@ gem 'font-awesome-rails', '~> 4.3.0.0'
 
 gem 'rails_12factor', group: :production
 
+# search
+gem 'elasticsearch-rails'
+gem 'elasticsearch-model'
+gem 'elasticsearch-extensions'
+
 group :development do
   gem 'letter_opener'
   gem 'quiet_assets' # mutes asset pipeline log messages
