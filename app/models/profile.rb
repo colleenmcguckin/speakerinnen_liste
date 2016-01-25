@@ -2,6 +2,9 @@ class Profile < ActiveRecord::Base
   include AutoHtml
   include HasPicture
 
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
   has_many :medialinks
 
   translates :bio, :main_topic, fallbacks_for_empty_translations: true
@@ -115,8 +118,39 @@ class Profile < ActiveRecord::Base
     )
   end
 
+  mapping do
+    indexes :id, index: :not_analyzed
+    indexes :firstname
+    indexes :lastname
+    indexes :fullname
+    indexes :city
+    indexes :twitter
+    indexes :medialinks
+    indexes :topics
+    indexes :bio
+    indexes :main_topic
+  end
+
+  def as_indexed_json(options = {})
+    self.as_json(only: [:id, :firstname, :lastname, :fullname, :city, :twitter, :medialinks, :topics, :bio, :main_topic])
+    include medialinks { only [:id, :fullname] }
+  end
+
+  class RelationError < StandardError
+    def initialize(msg = "That relation doesn't exist")
+      super(msg)
+    end
+  end
+
+  def add_many(type, data)
+    if type_in? ['Medialink']
+      self.send("#{type.downcase.pluralize}=". data.map do |g|
+        type.classify.constantize.where(name: g).first_or_create!
+      end)
+  end
   # for simple admin search
   # def self.search(query)
   #   where('firstname ILIKE :query OR lastname ILIKE :query OR twitter ILIKE :query', query: "%#{query}%")
   # end
+  end
 end

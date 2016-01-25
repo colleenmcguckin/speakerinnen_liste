@@ -1,12 +1,6 @@
 class ProfilesSearchController < ApplicationController
-
   def show
-    if params[:search]
-      @profiles = ProfilesSearch.new(params[:search]).results.page(params[:page]).per(16)
-    else
-      redirect_to profiles_url
-    end
+    @profiles = Profile.search((params[:query].present? ? params[:query] : '*')).records
     @tags = ActsAsTaggableOn::Tag.most_used(100)
   end
-
 end
