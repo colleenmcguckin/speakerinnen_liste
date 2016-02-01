@@ -122,18 +122,46 @@ class Profile < ActiveRecord::Base
     indexes :id, index: :not_analyzed
     indexes :firstname
     indexes :lastname
-    indexes :fullname
-    indexes :city
+    # indexes :fullname
+    # indexes :city
     indexes :twitter
-    indexes :medialinks
-    indexes :topics
-    indexes :bio
-    indexes :main_topic
+    # indexes :medialinks
+    # indexes :topics
+    # indexes :bio
+    # indexes :main_topic
   end
 
   def as_indexed_json(options = {})
-    self.as_json(only: [:id, :firstname, :lastname, :fullname, :city, :twitter, :medialinks, :topics, :bio, :main_topic])
-    include medialinks { only [:id, :fullname] }
+    self.as_json(only: [:id, :firstname, :lastname, :twitter], include: {
+      medialinks: { only: [:id, :title, :description] },
+      tags: { only: [:id, :name] }
+    })
+  end
+
+  # def as_indexed_json(options = {})
+  #   self.as_json(
+  #     include: {
+  #       medialinks: { only: [:id, :title, :description] },
+  #       tags: { only: [:id, :name] },
+  #       profile_translations: { only: [:id, :main_topic, :bio] }
+  #   })
+  # end
+
+  class << self
+    def custom_search(query)
+      __elasticsearch__.search(query: multi_match_query(query))
+    end
+    def multi_match_query(query)
+      {
+        multi_match: {
+          query: query,
+          type: 'best-fields',
+          fields: %w(fullname, twitter, tags),
+          operator: 'and'
+        }
+      }
+    end
+
   end
 
   class RelationError < StandardError
