@@ -6,6 +6,7 @@ class Profile < ActiveRecord::Base
   include Elasticsearch::Model::Callbacks
 
   has_many :medialinks
+  has_many :tags, through: :taggings
 
   translates :bio, :main_topic, fallbacks_for_empty_translations: true
   accepts_nested_attributes_for :translations
@@ -126,26 +127,17 @@ class Profile < ActiveRecord::Base
     # indexes :city
     indexes :twitter
     # indexes :medialinks
-    # indexes :topics
+    indexes :topics
     # indexes :bio
     # indexes :main_topic
   end
 
   def as_indexed_json(options = {})
     self.as_json(only: [:id, :firstname, :lastname, :twitter], include: {
-      medialinks: { only: [:id, :title, :description] },
-      tags: { only: [:id, :name] }
-    })
+      medialinks: { only: [:id, :title, :description] }
+      # topics: { only: [:id, :name] }
+    }).merge('topics' => topics.map(&:name))
   end
-
-  # def as_indexed_json(options = {})
-  #   self.as_json(
-  #     include: {
-  #       medialinks: { only: [:id, :title, :description] },
-  #       tags: { only: [:id, :name] },
-  #       profile_translations: { only: [:id, :main_topic, :bio] }
-  #   })
-  # end
 
   class << self
     def custom_search(query)
@@ -161,7 +153,6 @@ class Profile < ActiveRecord::Base
         }
       }
     end
-
   end
 
   class RelationError < StandardError
@@ -181,4 +172,15 @@ class Profile < ActiveRecord::Base
   #   where('firstname ILIKE :query OR lastname ILIKE :query OR twitter ILIKE :query', query: "%#{query}%")
   # end
   end
+
+  # # Delete the previous articles index in Elasticsearch
+  # Profile.__elasticsearch__.client.indices.delete index: Profile.index_name rescue nil
+
+  # # Create the new index with the new mapping
+  # Profile.__elasticsearch__.client.indices.create \
+  #   index: Profile.index_name,
+  #   body: { settings: Profile.settings.to_hash, mappings: Profile.mappings.to_hash }
+
+  # # Index all article records from the DB to Elasticsearch
+  # Profile.import
 end
