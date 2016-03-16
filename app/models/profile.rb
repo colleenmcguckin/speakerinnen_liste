@@ -120,16 +120,16 @@ class Profile < ActiveRecord::Base
   end
 
   mapping do
-    indexes :id, index: :not_analyzed
+    indexes :id, index: :no
     indexes :firstname
     indexes :lastname
-    # indexes :fullname
-    # indexes :city
+    indexes :city
     indexes :twitter
-    # indexes :medialinks
+    indexes :medialinks
     indexes :topics
-    # indexes :bio
-    # indexes :main_topic
+    indexes :bio
+    indexes :main_topic
+    indexes :picture, index: :no
   end
 
   def as_indexed_json(options = {})
@@ -162,8 +162,8 @@ class Profile < ActiveRecord::Base
   end
 
   def add_many(type, data)
-    if type_in? ['Medialink']
-      self.send("#{type.downcase.pluralize}=". data.map do |g|
+    if type_in? ['Topics', 'Medialink']
+      self.send("#{type.downcase.pluralize}=", data.map do |g|
         type.classify.constantize.where(name: g).first_or_create!
       end)
   end
