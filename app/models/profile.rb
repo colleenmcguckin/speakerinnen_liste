@@ -100,7 +100,8 @@ class Profile < ActiveRecord::Base
     end
   end
 
-  def as_json(_options = {})
+  # rename it as_api_json
+  def xas_json(_options = {})
     attributes.slice(
       'id',
       'firstname',
@@ -120,35 +121,37 @@ class Profile < ActiveRecord::Base
   end
 
   mapping do
-    indexes :id, index: :no
+    indexes :id, index: :not_analyzed
     indexes :firstname
     indexes :lastname
-    indexes :city
-    indexes :twitter
-    indexes :medialinks
-    indexes :topics
-    indexes :bio
-    indexes :main_topic
-    indexes :picture, index: :no
+    indexes :picture
+    # indexes :city
+    # indexes :twitter
+    # indexes :medialinks
+    # indexes :topics
+    # indexes :bio
+    # indexes :main_topic
   end
 
   def as_indexed_json(options = {})
-    self.as_json(only: [:id, :firstname, :lastname, :twitter], include: {
-      medialinks: { only: [:id, :title, :description] }
-      # topics: { only: [:id, :name] }
-    }).merge('topics' => topics.map(&:name))
+    as_json(only: [:id, :firstname, :lastname, :picture])
+      # , include: {
+      #  medialinks: { only: [:id, :title, :description] },
+      #  topics: { only: [:id, :name] }
+      #  }).merge('topics' => topics.map(&:name))
   end
 
   class << self
     def custom_search(query)
       __elasticsearch__.search(query: multi_match_query(query))
     end
+
     def multi_match_query(query)
       {
         multi_match: {
           query: query,
-          type: 'best-fields',
-          fields: %w(fullname, twitter, tags),
+          type: 'best_fields',
+          fields: %w(firstname lastname),
           operator: 'and'
         }
       }
@@ -161,17 +164,17 @@ class Profile < ActiveRecord::Base
     end
   end
 
-  def add_many(type, data)
-    if type_in? ['Topics', 'Medialink']
-      self.send("#{type.downcase.pluralize}=", data.map do |g|
-        type.classify.constantize.where(name: g).first_or_create!
-      end)
-  end
+  # def add_many(type, data)
+  #   if type_in? ['Medialink']
+  #     self.send("#{type.downcase.pluralize}=", data.map do |g|
+  #       type.classify.constantize.where(name: g).first_or_create!
+  #     end)
+  # end
   # for simple admin search
   # def self.search(query)
   #   where('firstname ILIKE :query OR lastname ILIKE :query OR twitter ILIKE :query', query: "%#{query}%")
   # end
-  end
+  # end
 
   # # Delete the previous articles index in Elasticsearch
   # Profile.__elasticsearch__.client.indices.delete index: Profile.index_name rescue nil
