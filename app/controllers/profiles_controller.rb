@@ -11,7 +11,7 @@ class ProfilesController < ApplicationController
     if params[:topic]
       @profiles = profiles_for_scope(params[:topic])
     else
-      @profiles = profiles_for_index
+      @profiles = Profile.custom_search((params[:query].present? ? params[:query] : profiles_for_index))
     end
     @tags = ActsAsTaggableOn::Tag.most_used(100)
   end
@@ -102,7 +102,7 @@ class ProfilesController < ApplicationController
 
   def profiles_for_index
     Profile.is_published
-      .search((params[:search].present? ? params[:search] : '*'))
+      .custom_search((params[:query].present? ? params[:query] : '*'))
       .records
       .order('created_at DESC')
       .page(params[:page])

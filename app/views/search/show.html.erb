@@ -7,9 +7,8 @@
       <%= t(:text, scope: 'profiles.index').html_safe %>
     </p>
     <a id="search_results_anchor"></a>
-    <%= render partial: 'shared/profile_search' %>
+    <%= render partial: 'shared/search' %>
 
-    <% if params[:search][:detailed_search_link_from_startpage].nil? %>
       <% if @profiles.any? %>
         <p class="text--color-blue font-size-24 text--center layout__item 1/1">
           <%= t(:success, scope: 'search' ).html_safe +
@@ -37,9 +36,9 @@
 
     <%= paginate @profiles %>
 
-    <%= render partial: 'profiles/tag' %>
+    <%= render partial: 'profiles/tag'%>
 
-    <%= render partial: 'layouts/footer' %>
+    <%= render partial: 'layouts/footer'%>
 
   </div>
 </section>

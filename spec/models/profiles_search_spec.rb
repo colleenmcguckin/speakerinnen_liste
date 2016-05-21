@@ -8,20 +8,21 @@ describe ProfilesSearch, type: :model do
 
   describe 'results' do
     it 'does not return unpublished profiles' do
-      expect(ProfilesSearch.new(quick: 'Fred').results).to be_empty
+      expect(Profile.custom_search(query: 'Fred').results).to be_empty
     end
 
     context 'quick search' do
       it 'does not return profiles that do not match the given search string' do
-        expect(ProfilesSearch.new(quick: 'Rosie').results).to be_empty
+        expect(Profile.custom_search(query: 'Rosie').results).to be_empty
       end
 
       it 'does return profiles that match the firstname' do
-        expect(ProfilesSearch.new(quick: 'Ada').results).to eq [profile]
+        pp Profile.custom_search('Ada')
+        expect(Profile.custom_search('Ada').results).to eq [profile]
       end
 
       it 'does return profiles that match the lastname' do
-        expect(ProfilesSearch.new(quick: 'Love').results).to eq [profile]
+        expect(ProfilesSearch.new(query: 'Love').results).to eq [profile]
       end
 
       # should work if elasticsearch is implemented
@@ -30,7 +31,7 @@ describe ProfilesSearch, type: :model do
       # end
 
       it 'does return profiles that match the firstname and the lastname' do
-        expect(ProfilesSearch.new(quick: 'Ada Lovelace').results).to eq [profile]
+        expect(ProfilesSearch.new(query: 'Ada Lovelace').results).to eq [profile]
       end
 
       # should work if elasticsearch is implemented
@@ -39,14 +40,14 @@ describe ProfilesSearch, type: :model do
       # end
 
       it 'does return profiles that match the twittername' do
-        expect(ProfilesSearch.new(quick: 'Lovelace').results).to eq [profile]
+        expect(ProfilesSearch.new(query: 'Lovelace').results).to eq [profile]
       end
 
       it 'does return profiles that match the topic' do
         profile.topic_list.add('algorithm')
         profile.save!
 
-        expect(ProfilesSearch.new(quick: 'algorithm').results).to eq [profile]
+        expect(ProfilesSearch.new(query: 'algorithm').results).to eq [profile]
       end
 
       # should work if elasticsearch is implemented
@@ -67,7 +68,7 @@ describe ProfilesSearch, type: :model do
       # end
 
       it 'does return nothing if only quick is given and empty' do
-        expect(ProfilesSearch.new(quick: '').results).to be_empty
+        expect(ProfilesSearch.new(query: '').results).to be_empty
       end
     end
 

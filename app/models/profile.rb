@@ -124,7 +124,7 @@ class Profile < ActiveRecord::Base
     indexes :id, index: :not_analyzed
     indexes :firstname
     indexes :lastname
-    indexes :picture
+    indexes :picture, index: :not_analyzed
     # indexes :city
     # indexes :twitter
     # indexes :medialinks
@@ -151,8 +151,7 @@ class Profile < ActiveRecord::Base
         multi_match: {
           query: query,
           type: 'best_fields',
-          fields: %w(firstname lastname),
-          operator: 'and'
+          fields: ['firstname', 'lastname']
         }
       }
     end
