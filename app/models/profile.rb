@@ -1,6 +1,10 @@
 class Profile < ActiveRecord::Base
   include AutoHtml
   include HasPicture
+  include ActiveModel::Serialization
+
+  # include Elasticsearch::Model
+  # include Elasticsearch::Model::Callbacks
 
   has_many :medialinks
 
@@ -98,27 +102,19 @@ class Profile < ActiveRecord::Base
     end
   end
 
-  def as_json(_options = {})
-    attributes.slice(
-      'id',
-      'firstname',
-      'lastname',
-      'city',
-      'twitter',
-      'created_at',
-      'updated_at',
-      'website'
-    ).merge(
-      'medialinks' => medialinks,
-      'topics' => topics.map(&:name),
-      'picture' => picture,
-      'bio' => bio_translations,
-      'main_topic' => main_topic_translations
-    )
-  end
+  # mapping do
+  #   indexes :id, index: not_analyzed
+  #   indexes :firstname
+  #   indexes :lastname
+  # end
+
+  # def as_indexed_json(options = {} )
+  #   self.as_json
+  # end
 
   # for simple admin search
   def self.search(query)
     where("firstname || ' ' || lastname ILIKE :query OR twitter ILIKE :query", query: "%#{query}%")
   end
+
 end
