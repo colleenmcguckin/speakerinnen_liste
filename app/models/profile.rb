@@ -1,10 +1,8 @@
 class Profile < ActiveRecord::Base
   include AutoHtml
   include HasPicture
+  include Searchable
   include ActiveModel::Serialization
-
-  # include Elasticsearch::Model
-  # include Elasticsearch::Model::Callbacks
 
   has_many :medialinks
 
@@ -101,20 +99,4 @@ class Profile < ActiveRecord::Base
       super
     end
   end
-
-  # mapping do
-  #   indexes :id, index: not_analyzed
-  #   indexes :firstname
-  #   indexes :lastname
-  # end
-
-  # def as_indexed_json(options = {} )
-  #   self.as_json
-  # end
-
-  # for simple admin search
-  def self.search(query)
-    where("firstname || ' ' || lastname ILIKE :query OR twitter ILIKE :query", query: "%#{query}%")
-  end
-
 end
