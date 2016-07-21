@@ -99,4 +99,24 @@ class Profile < ActiveRecord::Base
       super
     end
   end
+
+  # def self.import
+  #   Profile.find_in_batches do |profiles|
+  #     bulk_index(profiles)
+  #   end
+  # end
+
+  # def self.prepare_records(profiles)
+  #   profiles.map do |profile|
+  #     { index: { _id: profile.id, data: Searchable.as_indexed_json }}
+  #   end
+  # end
+
+  # def self.bulk_index(profiles)
+  #   Profile.__elasticsearch__.client.bulk({
+  #     index: ::Profile.__elasticsearch__.index_name,
+  #     type: ::Profile.__elasticsearch__.document_type,
+  #     body: prepare_records(profiles)
+  #     })
+  # end
 end
