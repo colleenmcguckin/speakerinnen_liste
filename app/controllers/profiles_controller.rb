@@ -10,6 +10,8 @@ class ProfilesController < ApplicationController
   def index
     if params[:topic]
       @profiles = profiles_for_scope(params[:topic])
+    elsif params[:search]
+      @profiles = Profile.search('maren').page(params[:page]).per(16)
     else
       @profiles = profiles_for_index
     end
